@@ -64,6 +64,6 @@ jobs:
         with:
           webhook: ${{ secrets.DISCORD_CI_CD_CHANNEL }}
           status: ${{ job.status }}
-          title: "Deploy"
+          title: "Web App Deploy"
           description: "Start deploy to GitHub Pages"
           username: GitHub Actions
