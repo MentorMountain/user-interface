@@ -32,3 +32,12 @@ jobs:
       
       - run: yarn
       - run: yarn build
+
+      - uses: sarisia/actions-status-discord@v1
+        if: always()
+        with:
+          webhook: ${{ secrets.DISCORD_CI_CD_CHANNEL }}
+          status: ${{ job.status }}
+          title: "Web App PR Build Validation"
+          description: "Web App validation"
+          username: GitHub Actions
