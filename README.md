@@ -2,7 +2,7 @@
 
 Simple UI to get it done
 
-[Default URL](https://highly-educational-and-very-useful.github.io/user-interface/)
+[Default URL](https://mentormountain.ca)
 
 ## Contributing
 
