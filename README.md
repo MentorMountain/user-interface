@@ -2,7 +2,7 @@
 
 Simple UI to get it done
 
-[Default URL](https://mentormountain.ca)
+[Default URL](https://www.mentormountain.ca)
 
 ## Contributing
 
