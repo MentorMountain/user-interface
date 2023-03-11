@@ -2,7 +2,7 @@
 // https://developer.mozilla.org/en-US/docs/Learn/Forms/Sending_forms_through_JavaScript
 
 /******************************************************************************
- *                            Form Button Handlers                            *
+ *                                API Handlers                                *
  ******************************************************************************/
 // ADDING QUESTION TO DATASTORE
 function questionAdd(form) {
@@ -43,7 +43,7 @@ function questionList() {
   // When a user clicks on the view button for a list item, make the QA form and list disappear
   // and make the question content, responses, and form to add a response appear
 
-  const data = '[{"_fieldsProto":{"date":{"timestampValue":{"seconds":"1678490944","nanos":937000000},"valueType":"timestampValue"},"authorUUID":{"stringValue":"Ben","valueType":"stringValue"},"title":{"stringValue":"how to centre a div?","valueType":"stringValue"},"content":{"stringValue":"test content test test","valueType":"stringValue"}},"_ref":{"_firestore":{"projectId":"benjamindjukastein301423488"},"_path":{"segments":["questions","Z9Zmk4bUV6uLY9Z0AnSl"]},"_converter":{}},"_serializer":{"allowUndefined":false},"_readTime":{"_seconds":1678561337,"_nanoseconds":498214000},"_createTime":{"_seconds":1678491008,"_nanoseconds":728393000},"_updateTime":{"_seconds":1678491008,"_nanoseconds":728393000}}, {"_fieldsProto":{"date":{"timestampValue":{"seconds":"1678490944","nanos":937000000},"valueType":"timestampValue"},"authorUUID":{"stringValue":"Ben","valueType":"stringValue"},"title":{"stringValue":"how to centre a div?","valueType":"stringValue"},"content":{"stringValue":"test content test test","valueType":"stringValue"}},"_ref":{"_firestore":{"projectId":"benjamindjukastein301423488"},"_path":{"segments":["questions","Z9Zmk4bUV6uLY9Z0AnSl"]},"_converter":{}},"_serializer":{"allowUndefined":false},"_readTime":{"_seconds":1678561337,"_nanoseconds":498214000},"_createTime":{"_seconds":1678491008,"_nanoseconds":728393000},"_updateTime":{"_seconds":1678491008,"_nanoseconds":728393000}}]'
+  const data = '[{"_fieldsProto":{"date":{"timestampValue":{"seconds":"1678490944","nanos":937000000},"valueType":"timestampValue"},"authorUUID":{"stringValue":"Ben","valueType":"stringValue"},"title":{"stringValue":"how to centre a div?","valueType":"stringValue"},"content":{"stringValue":"test content test test","valueType":"stringValue"}},"_ref":{"_firestore":{"projectId":"benjamindjukastein301423488"},"_path":{"segments":["questions","Z9Zmk4bUV6uLY9Z0AnSl"]},"_converter":{}},"_serializer":{"allowUndefined":false},"_readTime":{"_seconds":1678561337,"_nanoseconds":498214000},"_createTime":{"_seconds":1678491008,"_nanoseconds":728393000},"_updateTime":{"_seconds":1678491008,"_nanoseconds":728393000}}, {"_fieldsProto":{"date":{"timestampValue":{"seconds":"1678490944","nanos":937000000},"valueType":"timestampValue"},"authorUUID":{"stringValue":"Ben","valueType":"stringValue"},"title":{"stringValue":"how to cmpt474?","valueType":"stringValue"},"content":{"stringValue":"test content test test","valueType":"stringValue"}},"_ref":{"_firestore":{"projectId":"benjamindjukastein301423488"},"_path":{"segments":["questions","Z9Zmk4bUV6uLY9Z0AnSl"]},"_converter":{}},"_serializer":{"allowUndefined":false},"_readTime":{"_seconds":1678561337,"_nanoseconds":498214000},"_createTime":{"_seconds":1678491008,"_nanoseconds":728393000},"_updateTime":{"_seconds":1678491008,"_nanoseconds":728393000}}]'
   const questions = JSON.parse(data);
   console.log(data);
   console.log(questions);
@@ -56,12 +56,17 @@ function questionList() {
     viewButton.textContent = "View"
 
     viewButton.addEventListener("click", (event) => {
-      console.log("hi");
+      document.getElementById('question-creation-posts').style.display = 'none';
+      document.getElementById('question-post-responses').style.display = 'block';
+
+      // post content
+      document.getElementById('view-question-post-title').textContent = questionContent.title.stringValue;
+      document.getElementById('view-question-post-author').textContent = "Author: " + questionContent.authorUUID.stringValue;
+      document.getElementById('view-question-post-content').textContent = questionContent.content.stringValue;
     })
 
     listItem.appendChild(viewButton);
-    document.getElementById('questionResults').appendChild(listItem);
-    
+    document.getElementById('question-results').appendChild(listItem);
   });
 }
 
@@ -72,7 +77,13 @@ function questionList() {
 const addQuestionForm = document.getElementById("add-question-form");
 addQuestionForm.addEventListener("submit", (event) => {
   event.preventDefault();
-  blogAdd(addQuestionForm);
+  questionAdd(addQuestionForm);
+});
+
+const backButton = document.getElementById("back-to-question-creation-posts");
+backButton.addEventListener("click", (event) => {
+  document.getElementById('question-creation-posts').style.display = 'block';
+  document.getElementById('question-post-responses').style.display = 'none';
 });
 
 questionList();
