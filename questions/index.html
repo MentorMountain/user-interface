@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script type="text/javascript" src="./api_calls.js" defer></script>
+</head>
+<body>
+  <h1>Questions and Answers</h1>
+  <form id="add-question-form">
+    <h2>QA Post Creation</h2>
+    <label for="authorID">Author ID:</label><br>
+    <input type="text" maxlength="700" id="authorID" name="authorID" value="placeholder authorID"><br>
+    <label for="title">Question Title:</label><br>
+    <input type="text" size="40" maxlength="700" id="title" name="title" value="placeholder title"><br>
+    <label for="content">Content:</label><br>
+    <textarea rows="10" cols="75" maxlength="700" id="content" name="content">placeholder content post</textarea><br><br>
+    <input type="submit" value="Submit">
+    <p id="add-result">Button not pushed yet.</p>
+  </form>
+
+  <br><hr><br>
+
+  <div id="questionResults">
+    <h2>QA Posts</h2>
+    <ul></ul>
+  </div>
+  <div id ="questionView"></div>
+
+  <br><hr><br>
+</body>
+</html>
