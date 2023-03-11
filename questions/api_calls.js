@@ -1,6 +1,5 @@
 // Src for http requests in browser js
 // https://developer.mozilla.org/en-US/docs/Learn/Forms/Sending_forms_through_JavaScript
-
 /******************************************************************************
  *                            Form Button Handlers                            *
  ******************************************************************************/
@@ -56,12 +55,38 @@ function questionList() {
     viewButton.textContent = "View"
 
     viewButton.addEventListener("click", (event) => {
-      console.log("hi");
+      document.getElementById("qaMain").hidden = true;
+      document.getElementById("qaQuestion").hidden = false;
+      document.getElementById("questionTitle").innerText =
+          "Question: " + questionContent.title.stringValue
+      document.getElementById("questionAuthor").innerText =
+          "Author: " + questionContent.authorUUID.stringValue
+
+      const date = new Date(questionContent.date.timestampValue.seconds * 1000);
+      document.getElementById("questionDate").innerText = date;
+      document.getElementById("questionContent").innerText = questionContent.content.stringValue
+
+      // todo: query api for responses to a question, then append them as per the following:
+
+      // clear responses
+      const responseSection = document.getElementById("qaResponses");
+      responseSection.innerHTML = "";
+
+      // append new responses
+      let responseAuthor = document.createElement("span");
+      responseAuthor.style.fontWeight = "bold";
+      responseAuthor.innerText = "sampleAuthor says:"
+      let responseContent = document.createElement("span");
+      responseContent.innerText = "sampleResponse"
+      responseSection.appendChild(responseAuthor)
+      responseSection.appendChild(document.createElement("br"))
+      responseSection.appendChild(responseContent)
+      responseSection.appendChild(document.createElement("br"))
+      responseSection.appendChild(document.createElement("br"))
     })
 
     listItem.appendChild(viewButton);
     document.getElementById('questionResults').appendChild(listItem);
-    
   });
 }
 
@@ -74,5 +99,11 @@ addQuestionForm.addEventListener("submit", (event) => {
   event.preventDefault();
   blogAdd(addQuestionForm);
 });
+
+const backToQaMainBtn = document.getElementById("backToQaMain");
+backToQaMainBtn.addEventListener("click", () => {
+  document.getElementById("qaMain").hidden = false;
+  document.getElementById("qaQuestion").hidden = true;
+})
 
 questionList();

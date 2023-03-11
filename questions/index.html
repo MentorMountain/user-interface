@@ -8,27 +8,54 @@
   <script type="text/javascript" src="./api_calls.js" defer></script>
 </head>
 <body>
-  <h1>Questions and Answers</h1>
-  <form id="add-question-form">
-    <h2>QA Post Creation</h2>
-    <label for="authorID">Author ID:</label><br>
-    <input type="text" maxlength="700" id="authorID" name="authorID" value="placeholder authorID"><br>
-    <label for="title">Question Title:</label><br>
-    <input type="text" size="40" maxlength="700" id="title" name="title" value="placeholder title"><br>
-    <label for="content">Content:</label><br>
-    <textarea rows="10" cols="75" maxlength="700" id="content" name="content">placeholder content post</textarea><br><br>
-    <input type="submit" value="Submit">
-    <p id="add-result">Button not pushed yet.</p>
-  </form>
+  <section id="qaMain">
+    <h1>Questions and Answers</h1>
+    <form id="add-question-form">
+      <h2>QA Post Creation</h2>
+      <label for="authorID">Author ID:</label><br>
+      <input type="text" maxlength="700" id="authorID" name="authorID" value="placeholder authorID"><br>
+      <label for="title">Question Title:</label><br>
+      <input type="text" size="40" maxlength="700" id="title" name="title" value="placeholder title"><br>
+      <label for="content">Content:</label><br>
+      <textarea rows="10" cols="75" maxlength="700" id="content" name="content">placeholder content post</textarea><br><br>
+      <input type="submit" value="Submit">
+      <p id="add-result">Button not pushed yet.</p>
+    </form>
 
-  <br><hr><br>
+    <br><hr><br>
 
-  <div id="questionResults">
-    <h2>QA Posts</h2>
-    <ul></ul>
-  </div>
-  <div id ="questionView"></div>
+    <div id="questionResults">
+      <h2>QA Posts</h2>
+      <ul></ul>
+    </div>
+    <div id ="questionView"></div>
 
-  <br><hr><br>
+    <br><hr><br>
+  </section>
+  <section id="qaQuestion">
+    <button id="backToQaMain">Back</button>
+    <h1 id="questionTitle">Question: </h1>
+    <h3 id="questionAuthor">Asked by: larry</h3>
+    <p id="questionDate">chicken nugget</p>
+    <p id="questionContent">chicken strips</p>
+
+    <hr>
+
+    <form id="add-response-form">
+      <h3>QA Reply Creation</h3>
+      <label for="replyAuthorID">Author ID:</label><br>
+      <input type="text" maxlength="700" id="replyAuthorID" name="authorID" value="placeholder replyAuthorID"><br>
+      <label for="replyContent">Content:</label><br>
+      <textarea rows="10" cols="75" maxlength="700" id="replyContent" name="content">placeholder content response</textarea><br><br>
+      <input type="submit" value="Submit">
+      <p id="add-reply-result">Button not pushed yet.</p>
+    </form>
+
+    <hr>
+
+    <h3>Responses</h3>
+    <section id="qaResponses">
+    </section>
+  </section>
 </body>
 </html>
