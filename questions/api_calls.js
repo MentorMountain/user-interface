@@ -55,21 +55,21 @@ function questionList() {
     viewButton.textContent = "View"
 
     viewButton.addEventListener("click", (event) => {
-      document.getElementById("qaMain").hidden = true;
-      document.getElementById("qaQuestion").hidden = false;
-      document.getElementById("questionTitle").innerText =
+      document.getElementById("qa-main-section").style.display = "none";
+      document.getElementById("qa-question-section").style.display = "block";
+      document.getElementById("question-title").innerText =
           "Question: " + questionContent.title.stringValue
-      document.getElementById("questionAuthor").innerText =
+      document.getElementById("question-author").innerText =
           "Author: " + questionContent.authorUUID.stringValue
 
       const date = new Date(questionContent.date.timestampValue.seconds * 1000);
-      document.getElementById("questionDate").innerText = date;
-      document.getElementById("questionContent").innerText = questionContent.content.stringValue
+      document.getElementById("question-date").innerText = date;
+      document.getElementById("question-content").innerText = questionContent.content.stringValue
 
       // todo: query api for responses to a question, then append them as per the following:
 
       // clear responses
-      const responseSection = document.getElementById("qaResponses");
+      const responseSection = document.getElementById("qa-responses");
       responseSection.innerHTML = "";
 
       // append new responses
@@ -86,7 +86,7 @@ function questionList() {
     })
 
     listItem.appendChild(viewButton);
-    document.getElementById('questionResults').appendChild(listItem);
+    document.getElementById('qa-questions').appendChild(listItem);
   });
 }
 
@@ -100,10 +100,10 @@ addQuestionForm.addEventListener("submit", (event) => {
   blogAdd(addQuestionForm);
 });
 
-const backToQaMainBtn = document.getElementById("backToQaMain");
+const backToQaMainBtn = document.getElementById("back-to-qa-main");
 backToQaMainBtn.addEventListener("click", () => {
-  document.getElementById("qaMain").hidden = false;
-  document.getElementById("qaQuestion").hidden = true;
+  document.getElementById("qa-main-section").style.display = "block";
+  document.getElementById("qa-question-section").style.display = "none"
 })
 
 questionList();
