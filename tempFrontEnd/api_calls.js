@@ -5,6 +5,9 @@
 /******************************************************************************
  *                              Global Variables                              *
  ******************************************************************************/
+// GCLOUD API GATEWAY LINK
+const GCLOUD_API_GATEWAY = "https://mentor-mountain-gateway-i3jd550.wl.gateway.dev";
+
 // Mainatins the current list of blog posts locally so that we reduce...
 // ...repeated queries to the DB
 let BLOG_POSTS = [];
@@ -76,7 +79,6 @@ function blogAdd(form) {
       BLOG_POSTS.push(FD_DATA);
       if (!HAS_BLOGS_BEEN_QUERIED_YET) {
         getBlogList();
-        HAS_BLOGS_BEEN_QUERIED_YET = true;
       } else {
         renderBlogList();
       }
@@ -95,7 +97,7 @@ function blogAdd(form) {
   });
 
   // Set up our request
-  XHR.open("POST", "https://mentor-mountain-gateway-i3jd550.wl.gateway.dev/api/blog");
+  XHR.open("POST", `${GCLOUD_API_GATEWAY}/api/blog`);
   XHR.setRequestHeader("Content-Type", "application/json");
 
   // The data sent is what the user provided in the form
@@ -112,6 +114,7 @@ function getBlogList() {
   // Define what happens on successful connection
   XHR.addEventListener("load", (response) => {
     if (XHR.status === 200) { // Successful API interaction
+      HAS_BLOGS_BEEN_QUERIED_YET = true;
       BLOG_POSTS = JSON.parse(XHR.response);
       renderBlogList();
       document.getElementById('list-result').textContent = "Blog content get success";
@@ -132,7 +135,7 @@ function getBlogList() {
   });
 
   // Set up our request
-  XHR.open("GET", "https://mentor-mountain-gateway-i3jd550.wl.gateway.dev/api/blog");
+  XHR.open("GET", `${GCLOUD_API_GATEWAY}/api/blog`);
 
   // Send the request for the list of all blog posts
   console.log('Getting blog list');
