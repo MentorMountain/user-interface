@@ -14,7 +14,34 @@ let BLOG_POSTS = [];
  *                   Local Blog List Rendering/Manipulation                   *
  ******************************************************************************/
 function renderBlogList() {
+  BLOG_POSTS.forEach((blogPost) => {
+    // Create the container for the blog post info
+    const blogPostDiv = document.createElement("div");
 
+    
+    // Add blog post data into the div
+    const titleTag = document.createElement("h1");
+    titleTag.innerText = blogPost.title;
+    blogPostDiv.append(titleTag);
+    
+    const authorDateTag = document.createElement("p");
+    const dateString = new Date(blogPost.date ).toLocaleString(); // Might need brackets here TODO JAROD
+    authorDateTag.innerText = `Posted by ${blogPost.authorID} on ${dateString}`;
+    blogPostDiv.append(authorDateTag);
+    
+    const contentTag = document.createElement("p");
+    contentTag.innerText = blogPost.content;
+    blogPostDiv.append(contentTag);
+    
+    const postIDTag = document.createElement("p");
+    postIDTag.innerText = blogPost.postID;
+    blogPostDiv.append(postIDTag);
+
+    
+    // Add the blog post div we've created to the blog list div
+    const blogListDiv = document.getElementById("blog-list");
+    blogListDiv.append(blogPostDiv);
+  });
 }
 
 

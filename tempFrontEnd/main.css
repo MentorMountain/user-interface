@@ -1,4 +1,4 @@
-.blog-post {
+#blog-list div {
   border: 1px solid black;
   font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
   padding: 10px;
@@ -7,20 +7,24 @@
   margin: 10px;
 }
 
+#blog-list div p {
+  word-wrap: break-word;
+}
+
 /* Post Title */
-.blog-post h1 {
+#blog-list div h1 {
   margin: 0px;
   text-decoration: underline;
 }
 
-.blog-post p:nth-child(2) {
+#blog-list div p:nth-child(2) {
   color: #964B00;
   margin: 2px;
   font-size: 11px;
 }
 
 /* Post ID */
-.blog-post p:last-child {
+#blog-list div p:last-child {
   color: navy;
   font-size: 11px;
   float: right;
