@@ -8,12 +8,16 @@
 // Mainatins the current list of blog posts locally so that we reduce...
 // ...repeated queries to the DB
 let BLOG_POSTS = [];
+let HAS_BLOGS_BEEN_QUERIED_YET = false;
 
 
 /******************************************************************************
  *                   Local Blog List Rendering/Manipulation                   *
  ******************************************************************************/
 function renderBlogList() {
+  sortBlogListByDate();
+  const blogListDiv = document.getElementById("blog-list");
+  blogListDiv.innerHTML = "";
   BLOG_POSTS.forEach((blogPost) => {
     // Create the container for the blog post info
     const blogPostDiv = document.createElement("div");
@@ -39,9 +43,14 @@ function renderBlogList() {
 
     
     // Add the blog post div we've created to the blog list div
-    const blogListDiv = document.getElementById("blog-list");
     blogListDiv.append(blogPostDiv);
   });
+}
+
+function sortBlogListByDate() {
+  BLOG_POSTS.sort((a, b) => (
+    b.date - a.date
+  ));
 }
 
 
@@ -60,6 +69,17 @@ function blogAdd(form) {
       document.getElementById('add-result').textContent = "Content added successfully";
       document.getElementById('add-result').style.color = "green";
       console.log("Content added successfully");
+      // Also add data locally & inconsistently (not same as DB) re-render for DB performance
+      let FD_DATA = Object.fromEntries(FD);
+      FD_DATA.date = new Date().getTime();
+      FD_DATA.postID = "";
+      BLOG_POSTS.push(FD_DATA);
+      if (!HAS_BLOGS_BEEN_QUERIED_YET) {
+        getBlogList();
+        HAS_BLOGS_BEEN_QUERIED_YET = true;
+      } else {
+        renderBlogList();
+      }
     } else { // Unsuccessful API interaction
       document.getElementById('add-result').textContent = `Content submission failed`;
       document.getElementById('add-result').style.color = "red";
