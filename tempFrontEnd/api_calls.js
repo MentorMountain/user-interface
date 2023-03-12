@@ -41,7 +41,9 @@ function renderBlogList() {
     blogPostDiv.append(contentTag);
     
     const postIDTag = document.createElement("p");
-    postIDTag.innerText = blogPost.postID;
+    postIDTag.innerText = blogPost.postID === null ?
+                              "Local Cached Copy (Less API usage)" :
+                              `Doc ID: ${blogPost.postID}`;
     blogPostDiv.append(postIDTag);
 
     
@@ -66,6 +68,20 @@ function blogAdd(form) {
   const FD = new FormData(form);
   const FD_JSON = JSON.stringify(Object.fromEntries(FD));
 
+  // Never send data that is empty or too long
+  const FD_OBJ = Object.fromEntries(FD);
+  if (FD_OBJ.authorID.length === 0 || FD_OBJ.title.length === 0 || FD_OBJ.content.length === 0) {
+    document.getElementById('add-result').textContent = "Failure: Title/AuthorID/Content empty!";
+    document.getElementById('add-result').style.color = "red";
+    console.error("Failure: Title/AuthorID/Content empty!");
+    return;
+  } else if (FD_OBJ.authorID.length > 50 || FD_OBJ.title.length > 150 || FD_OBJ.content.length > 700) {
+    document.getElementById('add-result').textContent = "Failure: Title/AuthorID/Content too long!";
+    document.getElementById('add-result').style.color = "red";
+    console.error("Failure: Title/AuthorID/Content too long");
+    return;
+  }
+
   // Define what happens on successful connection
   XHR.addEventListener("load", (_) => {
     if (XHR.status === 201) { // Successful API interaction
@@ -75,7 +91,7 @@ function blogAdd(form) {
       // Also add data locally & inconsistently (not same as DB) re-render for DB performance
       let FD_DATA = Object.fromEntries(FD);
       FD_DATA.date = new Date().getTime();
-      FD_DATA.postID = "";
+      FD_DATA.postID = null;
       BLOG_POSTS.push(FD_DATA);
       if (!HAS_BLOGS_BEEN_QUERIED_YET) {
         getBlogList();
