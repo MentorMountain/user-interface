@@ -1,7 +1,7 @@
 // Src for http requests in browser js
 // https://developer.mozilla.org/en-US/docs/Learn/Forms/Sending_forms_through_JavaScript
 
-const GATEWAY_URL = "https://mentormountain-api-gateway-bs9b0qcb.wl.gateway.dev"
+const GATEWAY_URL = "ur mom"
 let INITIAL_QUESTION_IDS = [];
 let QUESTIONS = [];
 let RESPONSES;
