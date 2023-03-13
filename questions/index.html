@@ -26,7 +26,9 @@
 
     <div id="qa-questions">
       <h2>QA Posts</h2>
-      <ul></ul>
+      <button id="refresh-qa-list-btn">Refresh</button>
+      <ul id="qa-list"></ul>
+      <p id="list-result">Questions not loaded yet.</p>
     </div>
     <div id ="question-view"></div>
 
@@ -46,7 +48,7 @@
       <label for="replyAuthorID">Author ID:</label><br>
       <input type="text" maxlength="700" id="replyAuthorID" name="authorID" value="placeholder replyAuthorID"><br>
       <label for="replyContent">Content:</label><br>
-      <textarea rows="10" cols="75" maxlength="700" id="replyContent" name="content">placeholder content response</textarea><br><br>
+      <textarea rows="10" cols="75" maxlength="700" id="replyContent" name="message">placeholder content response</textarea><br><br>
       <input type="submit" value="Submit">
       <p id="add-reply-result">Button not pushed yet.</p>
     </form>
@@ -54,7 +56,11 @@
     <hr>
 
     <h3>Responses</h3>
-    <section id="qa-responses">
+    <button id="refresh-response-list-btn">Refresh</button>
+    <br><br>
+    <section>
+      <div id="qa-responses"></div>
+      <p id="responses-list-result">responses loading status</p>
     </section>
   </section>
 </body>

@@ -1,93 +1,246 @@
 // Src for http requests in browser js
 // https://developer.mozilla.org/en-US/docs/Learn/Forms/Sending_forms_through_JavaScript
+
+const GATEWAY_URL = "https://mentormountain-api-gateway-bs9b0qcb.wl.gateway.dev"
+let QUESTION_IDS = [];
+let QUESTIONS = [];
+let RESPONSES;
+
+const NO_QUESTION_ID = "joemama"
+let CURRENT_QUESTION_ID = NO_QUESTION_ID;
+
+let addQuestionStatus = document.getElementById('add-result');
+let addReplyStatus = document.getElementById('add-reply-result');
+let questionListStatus = document.getElementById('list-result');
+let replyListStatus = document.getElementById('responses-list-result');
 /******************************************************************************
  *                            Form Button Handlers                            *
  ******************************************************************************/
-// ADDING QUESTION TO DATASTORE
+
 function questionAdd(form) {
   const XHR = new XMLHttpRequest();
   const FD = new FormData(form);
   const FD_JSON = JSON.stringify(Object.fromEntries(FD));
 
-  // Define what happens on successful data submission
   XHR.addEventListener("load", (event) => {
-    document.getElementById('add-result').textContent = `${event.target.responseText}`;
-    document.getElementById('add-result').style.color = "black";
+    addQuestionStatus.textContent = `${event.target.responseText}`;
+    addQuestionStatus.style.color = "black";
     console.log(event.target.responseText);
+    loadQuestionIDs();
   });
 
-  // Define what happens in case of error
   XHR.addEventListener("error", (event) => {
-    document.getElementById('add-result').textContent = "Oops! Something went wrong.";
-    document.getElementById('add-result').style.color = "red";
+    addQuestionStatus.textContent = "Oops! Something went wrong.";
+    addQuestionStatus.style.color = "red";
     console.error("Oops! Something went wrong.");
   });
 
-  // Set up our request
-  XHR.open("POST", "https://blog-gateway-test-i3jd550.wl.gateway.dev/api/blog"); //  NEED TO CHANGE THIS TO QUESTIONS API
+  XHR.open("POST", GATEWAY_URL + "/api/questions");
   XHR.setRequestHeader("Content-Type", "application/json");
 
-  // The data sent is what the user provided in the form
   console.log(FD_JSON);
   XHR.send(FD_JSON);
 }
 
-// LISTING QUESTIONS IN DATASTORE
-function questionList() {
-  // Local data for local development 
-  // NEED TO SWITCH TO FETCHING THE FIRESTORE DATA FROM THE API
-  // WORKFLOW
-  // Get all of the questions IDs
-  // Using a loop, iterate through all of the question IDs and get their content
-  // When a user clicks on the view button for a list item, make the QA form and list disappear
-  // and make the question content, responses, and form to add a response appear
+function responseAdd(form) {
+  if (CURRENT_QUESTION_ID === NO_QUESTION_ID) {
+    console.log("No question ID is stored");
+    return;
+  }
 
-  const data = '[{"_fieldsProto":{"date":{"timestampValue":{"seconds":"1678490944","nanos":937000000},"valueType":"timestampValue"},"authorUUID":{"stringValue":"Ben","valueType":"stringValue"},"title":{"stringValue":"how to centre a div?","valueType":"stringValue"},"content":{"stringValue":"test content test test","valueType":"stringValue"}},"_ref":{"_firestore":{"projectId":"benjamindjukastein301423488"},"_path":{"segments":["questions","Z9Zmk4bUV6uLY9Z0AnSl"]},"_converter":{}},"_serializer":{"allowUndefined":false},"_readTime":{"_seconds":1678561337,"_nanoseconds":498214000},"_createTime":{"_seconds":1678491008,"_nanoseconds":728393000},"_updateTime":{"_seconds":1678491008,"_nanoseconds":728393000}}, {"_fieldsProto":{"date":{"timestampValue":{"seconds":"1678490944","nanos":937000000},"valueType":"timestampValue"},"authorUUID":{"stringValue":"Ben","valueType":"stringValue"},"title":{"stringValue":"how to centre a div?","valueType":"stringValue"},"content":{"stringValue":"test content test test","valueType":"stringValue"}},"_ref":{"_firestore":{"projectId":"benjamindjukastein301423488"},"_path":{"segments":["questions","Z9Zmk4bUV6uLY9Z0AnSl"]},"_converter":{}},"_serializer":{"allowUndefined":false},"_readTime":{"_seconds":1678561337,"_nanoseconds":498214000},"_createTime":{"_seconds":1678491008,"_nanoseconds":728393000},"_updateTime":{"_seconds":1678491008,"_nanoseconds":728393000}}]'
-  const questions = JSON.parse(data);
-  console.log(data);
-  console.log(questions);
-  questions.forEach(element => {
-    var questionContent = element._fieldsProto;
-    var listItem = document.createElement('li');
-    listItem.textContent = questionContent.title.stringValue + " by " + questionContent.authorUUID.stringValue;
+  const XHR = new XMLHttpRequest();
+  const FD = new FormData(form);
+  const FD_JSON = JSON.stringify(Object.fromEntries(FD));
 
-    var viewButton = document.createElement("button");
-    viewButton.textContent = "View"
-
-    viewButton.addEventListener("click", (event) => {
-      document.getElementById("qa-main-section").style.display = "none";
-      document.getElementById("qa-question-section").style.display = "block";
-      document.getElementById("question-title").innerText =
-          "Question: " + questionContent.title.stringValue
-      document.getElementById("question-author").innerText =
-          "Author: " + questionContent.authorUUID.stringValue
-
-      const date = new Date(questionContent.date.timestampValue.seconds * 1000);
-      document.getElementById("question-date").innerText = date;
-      document.getElementById("question-content").innerText = questionContent.content.stringValue
-
-      // todo: query api for responses to a question, then append them as per the following:
-
-      // clear responses
-      const responseSection = document.getElementById("qa-responses");
-      responseSection.innerHTML = "";
-
-      // append new responses
-      let responseAuthor = document.createElement("span");
-      responseAuthor.style.fontWeight = "bold";
-      responseAuthor.innerText = "sampleAuthor says:"
-      let responseContent = document.createElement("span");
-      responseContent.innerText = "sampleResponse"
-      responseSection.appendChild(responseAuthor)
-      responseSection.appendChild(document.createElement("br"))
-      responseSection.appendChild(responseContent)
-      responseSection.appendChild(document.createElement("br"))
-      responseSection.appendChild(document.createElement("br"))
-    })
-
-    listItem.appendChild(viewButton);
-    document.getElementById('qa-questions').appendChild(listItem);
+  XHR.addEventListener("load", (event) => {
+    addReplyStatus.textContent = `${event.target.responseText}`;
+    addReplyStatus.style.color = "black";
+    console.log(event.target.responseText);
   });
+
+  XHR.addEventListener("error", (event) => {
+    addReplyStatus.textContent = "Oops! Something went wrong.";
+    addReplyStatus.style.color = "red";
+    console.error("Oops! Something went wrong.");
+  });
+
+  XHR.open("POST", GATEWAY_URL + "/api/questions/" + CURRENT_QUESTION_ID + "/responses"); //  NEED TO CHANGE THIS TO QUESTIONS API
+  XHR.setRequestHeader("Content-Type", "application/json");
+
+  console.log(FD_JSON);
+  XHR.send(FD_JSON);
+
+  renderResponse(Object.fromEntries(FD).authorID, Object.fromEntries(FD).message)
+}
+
+function renderQuestionList() {
+  document.getElementById('qa-list').innerHTML = "";
+
+  QUESTIONS.forEach((element, index) => {
+    renderQuestion(element, QUESTION_IDS[index]);
+  });
+}
+
+function renderQuestion(question, id) {
+  let questionContent = question._fieldsProto;
+
+  let listItem = document.createElement('li');
+  listItem.textContent = questionContent.title.stringValue + " by " + questionContent.authorID.stringValue;
+
+  let viewButton = document.createElement("button");
+  viewButton.textContent = "View"
+
+  viewButton.addEventListener("click", (event) => {
+    const date = new Date(parseInt(questionContent.date.integerValue));
+    renderQuestionContent(questionContent.title.stringValue,
+        questionContent.authorID.stringValue,
+        questionContent.content.stringValue,
+        date, id);
+  })
+
+  listItem.appendChild(viewButton);
+  document.getElementById('qa-list').appendChild(listItem);
+}
+
+function renderQuestionContent(title, authorID, content, date, id) {
+  document.getElementById("qa-main-section").style.display = "none";
+  document.getElementById("qa-question-section").style.display = "block";
+  document.getElementById("question-title").innerText =
+      "Question: " + title
+  document.getElementById("question-author").innerText =
+      "Author: " + authorID
+
+  document.getElementById("question-date").innerText = date;
+  document.getElementById("question-content").innerText = content
+
+  loadQuestionResponses(id);
+  CURRENT_QUESTION_ID = id;
+}
+
+function renderResponse(authorID, message) {
+  const responseSection = document.getElementById("qa-responses");
+  const response = document.createElement("div");
+
+  let responseAuthor = document.createElement("span");
+  responseAuthor.style.fontWeight = "bold";
+  responseAuthor.innerText = authorID + " says:";
+  let responseContent = document.createElement("span");
+  responseContent.innerText = message;
+  response.appendChild(responseAuthor)
+  response.appendChild(document.createElement("br"))
+  response.appendChild(responseContent)
+  response.appendChild(document.createElement("br"))
+  response.appendChild(document.createElement("br"))
+  responseSection.appendChild(response)
+}
+
+function loadQuestionIDs() {
+  const XHR = new XMLHttpRequest();
+  document.getElementById("qa-list").innerHTML = "";
+  QUESTIONS = [];
+
+  XHR.addEventListener("load", (response) => {
+    if (XHR.status === 200) {
+      QUESTION_IDS = JSON.parse(XHR.response);
+      loadQuestionData();
+      questionListStatus.textContent = "QuestionIDs get success";
+      questionListStatus.style.color = "green";
+      console.log("QuestionIDs get success");
+    } else {
+      questionListStatus.textContent = `QuestionIDs get failed`;
+      questionListStatus.style.color = "red";
+      console.error("QuestionIDs get failed");
+    }
+  });
+
+  XHR.addEventListener("error", (event) => {
+    questionListStatus.textContent = `Failure: ${event}`;
+    questionListStatus.style.color = "red";
+    console.error("Oops! Something went wrong.");
+  });
+
+  XHR.open("GET", GATEWAY_URL + "/api/questions");
+
+  console.log('Getting QuestionIDs list');
+  questionListStatus.textContent = `Processing...`;
+  questionListStatus.style.color = "black";
+  XHR.send();
+}
+
+function loadQuestionData() {
+  QUESTION_IDS.forEach(id => {
+    const XHR = new XMLHttpRequest();
+
+    XHR.addEventListener("load", (response) => {
+      if (XHR.status === 200) {
+        QUESTIONS.push(JSON.parse(XHR.response));
+
+        questionListStatus.textContent = "Questions get success";
+        questionListStatus.style.color = "green";
+        // console.log("Questions get success");
+        renderQuestionList();
+      } else {
+        questionListStatus.textContent = `Questions get failed`;
+        questionListStatus.style.color = "red";
+        // console.error("Questions get failed");
+      }
+    });
+
+    XHR.addEventListener("error", (event) => {
+      questionListStatus.textContent = `Failure: ${event}`;
+      questionListStatus.style.color = "red";
+      console.error("Oops! Something went wrong.");
+    });
+
+    XHR.open("GET", GATEWAY_URL + "/api/questions/" + id);
+
+    console.log('Getting Question');
+    questionListStatus.textContent = `Processing...`;
+    questionListStatus.style.color = "black";
+    XHR.send();
+  })
+  console.log(QUESTIONS)
+  console.log('Done getting questions');
+}
+
+function loadQuestionResponses(questionID) {
+  const responseSection = document.getElementById("qa-responses");
+  responseSection.innerHTML = "";
+
+  const XHR = new XMLHttpRequest();
+
+  XHR.addEventListener("load", (response) => {
+    if (XHR.status === 200) {
+      RESPONSES = JSON.parse(XHR.response);
+      console.log(RESPONSES);
+
+      replyListStatus.textContent = "Response get success";
+      replyListStatus.style.color = "green";
+      console.log("Response get success");
+
+      RESPONSES.forEach(response => {
+        renderResponse(response.authorID, response.message);
+      })
+    } else {
+      replyListStatus.textContent = `Response get failed`;
+      replyListStatus.style.color = "red";
+      console.error("Response get failed");
+    }
+  });
+
+  XHR.addEventListener("error", (event) => {
+    replyListStatus.textContent = `Failure: ${event}`;
+    replyListStatus.style.color = "red";
+    console.error("Oops! Something went wrong.");
+  });
+
+  XHR.open("GET", GATEWAY_URL + "/api/questions/" + questionID + "/responses");
+  console.log(GATEWAY_URL + "/api/questions/" + questionID + "/responses")
+
+  console.log('Getting Responses list');
+  replyListStatus.textContent = `Processing...`;
+  replyListStatus.style.color = "black";
+  XHR.send();
 }
 
 
@@ -97,7 +250,13 @@ function questionList() {
 const addQuestionForm = document.getElementById("add-question-form");
 addQuestionForm.addEventListener("submit", (event) => {
   event.preventDefault();
-  blogAdd(addQuestionForm);
+  questionAdd(addQuestionForm);
+});
+
+const addResponseForm = document.getElementById("add-response-form");
+addResponseForm.addEventListener("submit", (event) => {
+  event.preventDefault();
+  responseAdd(addResponseForm);
 });
 
 const backToQaMainBtn = document.getElementById("back-to-qa-main");
@@ -106,4 +265,14 @@ backToQaMainBtn.addEventListener("click", () => {
   document.getElementById("qa-question-section").style.display = "none"
 })
 
-questionList();
+const refreshQaListBtn = document.getElementById("refresh-qa-list-btn");
+refreshQaListBtn.addEventListener("click", () => {
+  loadQuestionIDs();
+})
+
+const refreshResponseListBtn = document.getElementById("refresh-response-list-btn");
+refreshResponseListBtn.addEventListener("click", () => {
+  loadQuestionResponses(CURRENT_QUESTION_ID);
+})
+
+loadQuestionIDs();
