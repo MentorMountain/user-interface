@@ -3,7 +3,6 @@
 
 const GATEWAY_URL = "https://mentormountain-api-gateway-bs9b0qcb.wl.gateway.dev"
 let INITIAL_QUESTION_IDS = [];
-let SORTED_QUESTION_IDS = [];
 let QUESTIONS = [];
 let RESPONSES;
 
@@ -86,7 +85,7 @@ function renderQuestionList() {
   QUESTIONS.forEach((element, index) => {
     // console.log("Rendering: Question[" + index + "]")
     // console.log(element._fieldsProto)
-    renderQuestion(element, SORTED_QUESTION_IDS[index]);
+    renderQuestion(element, element.id);
   });
 }
 
@@ -194,14 +193,16 @@ function loadQuestionIDs() {
 }
 
 function loadQuestionData() {
-  SORTED_QUESTION_IDS = [];
   INITIAL_QUESTION_IDS.forEach((id, index) => {
     const XHR = new XMLHttpRequest();
 
     XHR.addEventListener("load", (response) => {
       if (XHR.status === 200) {
-        QUESTIONS.push(JSON.parse(XHR.response));
-        SORTED_QUESTION_IDS.push(id);
+        let question = JSON.parse(XHR.response);
+        question.id = id;
+        console.log(question)
+
+        QUESTIONS.push(question);
 
         questionListStatus.textContent = "Questions get success";
         questionListStatus.style.color = "green";
