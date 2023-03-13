@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script type="text/javascript" src="./api_calls.js" defer></script>
+</head>
+<body>
+  <a href="../blogFrontEnd/blog.html">Go to Blogs</a>
+
+  <section id="qa-main-section">
+    <h1>Questions and Answers</h1>
+    <form id="add-question-form">
+      <h2>QA Post Creation</h2>
+      <label for="authorID">Author ID:</label><br>
+      <input type="text" maxlength="700" id="authorID" name="authorID" value="placeholder authorID"><br>
+      <label for="title">Question Title:</label><br>
+      <input type="text" size="40" maxlength="700" id="title" name="title" value="placeholder title"><br>
+      <label for="content">Content:</label><br>
+      <textarea rows="10" cols="75" maxlength="700" id="content" name="content">placeholder content post</textarea><br><br>
+      <input type="submit" value="Submit">
+      <p id="add-result">Button not pushed yet.</p>
+    </form>
+
+    <br><hr><br>
+
+    <div id="qa-questions">
+      <h2>QA Posts</h2>
+      <button id="refresh-qa-list-btn">Refresh</button>
+      <ul id="qa-list"></ul>
+      <p id="list-result">Questions not loaded yet.</p>
+    </div>
+    <div id ="question-view"></div>
+
+    <br><hr><br>
+  </section>
+  <section id="qa-question-section" style="display:none">
+    <button id="back-to-qa-main">Back</button>
+    <h1 id="question-title">Question: </h1>
+    <h3 id="question-author">Asked by: larry</h3>
+    <p id="question-date">chicken nugget</p>
+    <p id="question-content">chicken strips</p>
+
+    <hr>
+
+    <form id="add-response-form">
+      <h3>QA Reply Creation</h3>
+      <label for="replyAuthorID">Author ID:</label><br>
+      <input type="text" maxlength="700" id="replyAuthorID" name="authorID" value="placeholder replyAuthorID"><br>
+      <label for="replyContent">Content:</label><br>
+      <textarea rows="10" cols="75" maxlength="700" id="replyContent" name="message">placeholder content response</textarea><br><br>
+      <input type="submit" value="Submit">
+      <p id="add-reply-result">Button not pushed yet.</p>
+    </form>
+
+    <hr>
+
+    <h3>Responses</h3>
+    <button id="refresh-response-list-btn">Refresh</button>
+    <br><br>
+    <section>
+      <div id="qa-responses"></div>
+      <p id="responses-list-result">responses loading status</p>
+    </section>
+  </section>
+</body>
+</html>
