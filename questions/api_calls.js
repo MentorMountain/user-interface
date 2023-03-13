@@ -85,7 +85,8 @@ function renderQuestion(question, id) {
   let questionContent = question._fieldsProto;
 
   let listItem = document.createElement('li');
-  listItem.textContent = questionContent.title.stringValue + " by " + questionContent.authorID.stringValue;
+  listItem.textContent = questionContent.title.stringValue + " by Anonymous";
+  // listItem.textContent = questionContent.title.stringValue + " by " + questionContent.authorID.stringValue;
 
   let viewButton = document.createElement("button");
   viewButton.textContent = "View"
@@ -110,7 +111,8 @@ function renderQuestionContent(title, authorID, content, date, id) {
   document.getElementById("question-title").innerText =
       "Question: " + title
   document.getElementById("question-author").innerText =
-      "Author: " + authorID
+      "Author: Anonymous"
+      // "Author: " + authorID
 
   document.getElementById("question-date").innerText = date;
   document.getElementById("question-content").innerText = content
@@ -131,7 +133,8 @@ function renderResponse(authorID, message, date, isPrepend) {
 
   let responseAuthor = document.createElement("span");
   responseAuthor.style.fontWeight = "bold";
-  responseAuthor.innerText = authorID + " says:";
+  responseAuthor.innerText = "Anonymous says:";
+  // responseAuthor.innerText = authorID + " says:";
 
   let responseContent = document.createElement("span");
   responseContent.innerText = message;
