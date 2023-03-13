@@ -70,7 +70,7 @@ function responseAdd(form) {
   console.log(FD_JSON);
   XHR.send(FD_JSON);
 
-  renderResponse(Object.fromEntries(FD).authorID, Object.fromEntries(FD).message)
+  renderResponse(Object.fromEntries(FD).authorID, Object.fromEntries(FD).message, Date.now(), true)
 }
 
 function renderQuestionList() {
@@ -119,13 +119,20 @@ function renderQuestionContent(title, authorID, content, date, id) {
   CURRENT_QUESTION_ID = id;
 }
 
-function renderResponse(authorID, message) {
+function renderResponse(authorID, message, date, isPrepend) {
   const responseSection = document.getElementById("qa-responses");
   const response = document.createElement("div");
+
+  let responseDate = document.createElement("span");
+  responseDate.innerText = "Posted on: " + new Date(date);
+  responseDate.style.fontSize = "12px";
+  response.appendChild(responseDate)
+  response.appendChild(document.createElement("br"))
 
   let responseAuthor = document.createElement("span");
   responseAuthor.style.fontWeight = "bold";
   responseAuthor.innerText = authorID + " says:";
+
   let responseContent = document.createElement("span");
   responseContent.innerText = message;
   response.appendChild(responseAuthor)
@@ -133,7 +140,9 @@ function renderResponse(authorID, message) {
   response.appendChild(responseContent)
   response.appendChild(document.createElement("br"))
   response.appendChild(document.createElement("br"))
-  responseSection.appendChild(response)
+
+  if (isPrepend) responseSection.prepend(response)
+  else responseSection.appendChild(response)
 }
 
 function loadQuestionIDs() {
@@ -221,8 +230,14 @@ function loadQuestionResponses(questionID) {
       replyListStatus.style.color = "green";
       console.log("Response get success");
 
+      RESPONSES.sort((a, b) => {
+        if (a.date < b.date) return 1;
+        if (a.date > b.date) return -1;
+        return 0;
+      })
+
       RESPONSES.forEach(response => {
-        renderResponse(response.authorID, response.message);
+        renderResponse(response.authorID, response.message, response.date, false);
       })
     } else {
       replyListStatus.textContent = `Response get failed`;
