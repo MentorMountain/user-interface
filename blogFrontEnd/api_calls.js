@@ -6,7 +6,7 @@
  *                              Global Variables                              *
  ******************************************************************************/
 // GCLOUD API GATEWAY LINK
-const GCLOUD_API_GATEWAY = "https://mentor-mountain-gateway-i3jd550.wl.gateway.dev";
+const GCLOUD_API_GATEWAY = "<PUT URL HERE OF FORMAT https://GATEWAY.wl.gateway.dev>";
 
 // Mainatins the current list of blog posts locally so that we reduce...
 // ...repeated queries to the DB
