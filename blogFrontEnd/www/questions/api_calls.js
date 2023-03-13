@@ -1,12 +1,12 @@
 // Src for http requests in browser js
 // https://developer.mozilla.org/en-US/docs/Learn/Forms/Sending_forms_through_JavaScript
 
-const GATEWAY_URL = "ur mom"
+const GATEWAY_URL = "<CHANGE THIS>"
 let INITIAL_QUESTION_IDS = [];
 let QUESTIONS = [];
 let RESPONSES;
 
-const NO_QUESTION_ID = "joemama"
+const NO_QUESTION_ID = "unknownquestion"
 let CURRENT_QUESTION_ID = NO_QUESTION_ID;
 
 let addQuestionStatus = document.getElementById('add-result');
