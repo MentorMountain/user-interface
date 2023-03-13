@@ -103,6 +103,8 @@ function renderQuestion(question, id) {
 }
 
 function renderQuestionContent(title, authorID, content, date, id) {
+  console.log("rendering question ID: " + id);
+
   document.getElementById("qa-main-section").style.display = "none";
   document.getElementById("qa-question-section").style.display = "block";
   document.getElementById("question-title").innerText =
@@ -206,6 +208,7 @@ function loadQuestionData() {
 function loadQuestionResponses(questionID) {
   const responseSection = document.getElementById("qa-responses");
   responseSection.innerHTML = "";
+  RESPONSES = [];
 
   const XHR = new XMLHttpRequest();
 
@@ -263,6 +266,7 @@ const backToQaMainBtn = document.getElementById("back-to-qa-main");
 backToQaMainBtn.addEventListener("click", () => {
   document.getElementById("qa-main-section").style.display = "block";
   document.getElementById("qa-question-section").style.display = "none"
+  CURRENT_QUESTION_ID = NO_QUESTION_ID;
 })
 
 const refreshQaListBtn = document.getElementById("refresh-qa-list-btn");
