@@ -2,7 +2,8 @@
 // https://developer.mozilla.org/en-US/docs/Learn/Forms/Sending_forms_through_JavaScript
 
 const GATEWAY_URL = "https://mentormountain-api-gateway-bs9b0qcb.wl.gateway.dev"
-let QUESTION_IDS = [];
+let INITIAL_QUESTION_IDS = [];
+let SORTED_QUESTION_IDS = [];
 let QUESTIONS = [];
 let RESPONSES;
 
@@ -76,13 +77,21 @@ function responseAdd(form) {
 function renderQuestionList() {
   document.getElementById('qa-list').innerHTML = "";
 
+  // console.log(INITIAL_QUESTION_IDS)
+  // console.log(QUESTIONS)
+
   QUESTIONS.forEach((element, index) => {
-    renderQuestion(element, QUESTION_IDS[index]);
+    // console.log("Rendering: Question[" + index + "]")
+    // console.log(element._fieldsProto)
+    renderQuestion(element, SORTED_QUESTION_IDS[index]);
   });
 }
 
 function renderQuestion(question, id) {
   let questionContent = question._fieldsProto;
+  console.log("RENDERING QUESTION:")
+  console.log(questionContent.title.stringValue + " | " + questionContent.authorID.stringValue +
+      " | " + questionContent.content.stringValue + " | " + id);
 
   let listItem = document.createElement('li');
   listItem.textContent = questionContent.title.stringValue + " by Anonymous";
@@ -105,6 +114,7 @@ function renderQuestion(question, id) {
 
 function renderQuestionContent(title, authorID, content, date, id) {
   console.log("rendering question ID: " + id);
+  CURRENT_QUESTION_ID = id;
 
   document.getElementById("qa-main-section").style.display = "none";
   document.getElementById("qa-question-section").style.display = "block";
@@ -118,7 +128,6 @@ function renderQuestionContent(title, authorID, content, date, id) {
   document.getElementById("question-content").innerText = content
 
   loadQuestionResponses(id);
-  CURRENT_QUESTION_ID = id;
 }
 
 function renderResponse(authorID, message, date, isPrepend) {
@@ -155,7 +164,7 @@ function loadQuestionIDs() {
 
   XHR.addEventListener("load", (response) => {
     if (XHR.status === 200) {
-      QUESTION_IDS = JSON.parse(XHR.response);
+      INITIAL_QUESTION_IDS = JSON.parse(XHR.response);
       loadQuestionData();
       questionListStatus.textContent = "QuestionIDs get success";
       questionListStatus.style.color = "green";
@@ -182,17 +191,20 @@ function loadQuestionIDs() {
 }
 
 function loadQuestionData() {
-  QUESTION_IDS.forEach(id => {
+  SORTED_QUESTION_IDS = [];
+  INITIAL_QUESTION_IDS.forEach((id, index) => {
     const XHR = new XMLHttpRequest();
 
     XHR.addEventListener("load", (response) => {
       if (XHR.status === 200) {
         QUESTIONS.push(JSON.parse(XHR.response));
+        SORTED_QUESTION_IDS.push(id);
 
         questionListStatus.textContent = "Questions get success";
         questionListStatus.style.color = "green";
         // console.log("Questions get success");
         renderQuestionList();
+
       } else {
         questionListStatus.textContent = `Questions get failed`;
         questionListStatus.style.color = "red";
