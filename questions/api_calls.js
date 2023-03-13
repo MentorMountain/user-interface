@@ -77,8 +77,11 @@ function responseAdd(form) {
 function renderQuestionList() {
   document.getElementById('qa-list').innerHTML = "";
 
-  // console.log(INITIAL_QUESTION_IDS)
-  // console.log(QUESTIONS)
+  QUESTIONS.sort((a, b) => {
+    if (a._fieldsProto.date.integerValue > b._fieldsProto.date.integerValue) return -1;
+    if (a._fieldsProto.date.integerValue < b._fieldsProto.date.integerValue) return 1;
+    return 0;
+  })
 
   QUESTIONS.forEach((element, index) => {
     // console.log("Rendering: Question[" + index + "]")
